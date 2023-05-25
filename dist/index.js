@@ -1,6 +1,25 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 1403:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const addLabels = async (linearClient, issue, labelIds) => {
+    if (!labelIds.length) {
+        return;
+    }
+    await linearClient.issueUpdate(issue.id, {
+        labelIds: labelIds,
+    });
+};
+exports["default"] = addLabels;
+
+
+/***/ }),
+
 /***/ 729:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -67,6 +86,13 @@ const sdk_1 = __nccwpck_require__(8851);
 const github_1 = __nccwpck_require__(5438);
 const getTeams_1 = __importDefault(__nccwpck_require__(9236));
 const getIssueByTeamAndNumber_1 = __importDefault(__nccwpck_require__(729));
+const addLabels_1 = __importDefault(__nccwpck_require__(1403));
+const getIdsFromInput = (input) => {
+    if (!input.trim()) {
+        return [];
+    }
+    return input.split(",").map((id) => id.trim());
+};
 const main = async () => {
     try {
         const prTitle = github_1.context?.payload?.pull_request?.title;
@@ -94,6 +120,7 @@ const main = async () => {
             (0, core_1.setFailed)(`No teams found in Linear workspace`);
             return;
         }
+        const labelIds = getIdsFromInput((0, core_1.getInput)("linear-issue-label-ids"));
         for (const team of teams) {
             // TODO: Iterate over multiple matches and not just first match
             const regexString = `${team.key}-(?<issueNumber>\\d+)`;
@@ -106,6 +133,7 @@ const main = async () => {
                 (0, core_1.debug)(`Found issue number: ${issueNumber}`);
                 const issue = await (0, getIssueByTeamAndNumber_1.default)(linearClient, team, Number(issueNumber));
                 if (issue) {
+                    (0, addLabels_1.default)(linearClient, issue, labelIds);
                     (0, core_1.setOutput)("linear-team-id", team.id);
                     (0, core_1.setOutput)("linear-team-key", team.key);
                     (0, core_1.setOutput)("linear-issue-id", issue.id);

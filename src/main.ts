@@ -1,8 +1,16 @@
 import { debug, setFailed, getInput, setOutput } from "@actions/core";
-import { LinearClient } from "@linear/sdk";
+import { Issue, LinearClient, Team } from "@linear/sdk";
 import { context } from "@actions/github";
 import getTeams from "./getTeams";
 import getIssueByTeamAndNumber from "./getIssueByTeamAndNumber";
+import addLabels from "./addLabels";
+
+const getIdsFromInput = (input: string): string[] => {
+  if (!input.trim()) {
+    return [];
+  }
+  return input.split(",").map((id) => id.trim());
+};
 
 const main = async () => {
   try {
@@ -35,6 +43,7 @@ const main = async () => {
       return;
     }
 
+    const labelIds = getIdsFromInput(getInput("linear-issue-label-ids"));
     for (const team of teams) {
       // TODO: Iterate over multiple matches and not just first match
       const regexString = `${team.key}-(?<issueNumber>\\d+)`;
@@ -52,6 +61,7 @@ const main = async () => {
           Number(issueNumber)
         );
         if (issue) {
+          addLabels(linearClient, issue, labelIds);
           setOutput("linear-team-id", team.id);
           setOutput("linear-team-key", team.key);
           setOutput("linear-issue-id", issue.id);

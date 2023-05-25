@@ -4,6 +4,8 @@ inputs:
   linear-api-key:
     description: "Linear API key generated from https://linear.app/settings/api . (e.g. `lin_api_*)`"
     required: true
+  linear-issue-label-ids:
+    description: "Comma deliminated label ids to add once issue is found"
 outputs:
   linear-issue-id:
     description: "The unique identifier of the Linear issue. (UUID)"

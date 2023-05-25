@@ -1,7 +1,6 @@
 import { Issue, LinearClient, Team } from "@linear/sdk";
 import { uniq } from "lodash";
 
-
 const addLabels = async (
   linearClient: LinearClient,
   issue: Issue,

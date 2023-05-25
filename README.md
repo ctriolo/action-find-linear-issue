@@ -45,7 +45,7 @@ jobs:
     steps:
       - name: Find the Linear Issue
         id: findIssue
-        uses: ctriolo/action-find-linear-issue@v1
+        uses: ctriolo/action-find-linear-issue@v0.6
         with:
           linear-api-key: ${{secrets.LINEAR_API_KEY}}
 

@@ -10,7 +10,7 @@ import { Issue, LinearClient, Team } from "@linear/sdk";
 const getIssueByTeamAndNumber = async (
   linearClient: LinearClient,
   team: Team,
-  issueNumber: number
+  issueNumber: number,
 ): Promise<Issue | null> => {
   const issues = await linearClient.issues({
     filter: {

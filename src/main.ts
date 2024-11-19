@@ -58,7 +58,7 @@ const main = async () => {
         const issue = await getIssueByTeamAndNumber(
           linearClient,
           team,
-          Number(issueNumber)
+          Number(issueNumber),
         );
         if (issue) {
           addLabels(linearClient, issue, labelIds);
@@ -76,7 +76,7 @@ const main = async () => {
     }
 
     setFailed(
-      `Failed to find Linear issue identifier in PR branch, title, or body.`
+      `Failed to find Linear issue identifier in PR branch, title, or body.`,
     );
     return;
   } catch (error) {

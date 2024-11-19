@@ -4,7 +4,7 @@ import { uniq } from "lodash";
 const addLabels = async (
   linearClient: LinearClient,
   issue: Issue,
-  newLabelIds: string[]
+  newLabelIds: string[],
 ): Promise<void> => {
   if (!newLabelIds.length) {
     return;
@@ -12,7 +12,7 @@ const addLabels = async (
   const oldLabels = await issue.labels();
   const oldLabelIds = oldLabels.nodes.map((label) => label.id);
   const labelIds = uniq([...oldLabelIds, ...newLabelIds]);
-  await linearClient.issueUpdate(issue.id, {
+  await linearClient.updateIssue(issue.id, {
     labelIds: labelIds,
   });
 };
